@@ -1,0 +1,28 @@
+.category-card {
+  width: 180px;
+  height: 180px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 12px;
+
+  background: white;
+
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+
+  cursor: pointer;
+
+  transition: .3s;
+}
+
+.category-card:hover{
+    transform: translateY(-8px);
+}
+
+.category-icon{
+    font-size:50px;
+    margin-bottom:20px;
+}

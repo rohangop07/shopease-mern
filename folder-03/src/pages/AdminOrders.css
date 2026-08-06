@@ -1,0 +1,49 @@
+.admin-orders {
+  min-height: 100vh;
+  padding: 40px;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: white;
+}
+
+.admin-orders h1 {
+  margin-bottom: 30px;
+  font-size: 32px;
+}
+
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px);
+}
+
+.orders-table th {
+  background: rgba(255,255,255,0.12);
+  padding: 18px;
+  text-align: left;
+  font-size: 15px;
+}
+
+.orders-table td {
+  padding: 16px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.orders-table tr:hover {
+  background: rgba(255,255,255,0.05);
+}
+
+.orders-table select {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  background: #4f46e5;
+  color: white;
+  cursor: pointer;
+}
+
+.orders-table select:focus {
+  outline: none;
+}
