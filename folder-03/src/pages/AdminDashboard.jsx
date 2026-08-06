@@ -4,6 +4,8 @@ import api from "../services/api";
 import "./AdminDashboard.css";
 import adminImage from "../assets/images123.jpg";
 
+import toast from "react-hot-toast";
+
 function AdminDashboard() {
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
@@ -31,11 +33,11 @@ function AdminDashboard() {
     try {
       const response = await api.delete(`/products/${id}`);
 
-      alert(response.data.message);
+      toast.success(response.data.message);
 
       getProducts();
     } catch (error) {
-      alert(error.response?.data?.message || "Delete Failed");
+      toast.error(error.response?.data?.message || "Delete Failed");
     }
   };
 

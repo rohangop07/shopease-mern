@@ -7,6 +7,8 @@ import {Link} from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
+import toast from "react-hot-toast";
+
 import "./Login.css";
 
 function Login() {
