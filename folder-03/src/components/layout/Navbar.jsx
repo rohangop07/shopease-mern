@@ -25,7 +25,7 @@ function Navbar() {
     }
   };
 
-  const [menuOpen, setMenuOpen] = usestate(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <nav className="navbar">
