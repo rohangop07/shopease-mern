@@ -4,7 +4,11 @@ import Button from "../../components/ui/Button";
 import categories from "../../constants/categories";
 import CategoryCard from "../../components/category/CategoryCard";
 
+import { useNavigate } from "react-router-dom";
+
 function Home() {
+
+  const navigate = useNavigate();
   return (
     <>
       {/* Hero Section */}
@@ -24,7 +28,7 @@ function Home() {
 
           <Button
             text="Shop Now"
-            onClick={() => alert("Products page will be added soon!")}
+            onClick={() => navigate("/products") }
           />
         </div>
 
