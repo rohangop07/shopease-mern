@@ -3,7 +3,7 @@ import "./Footer.css";
 function Footer() {
   return (
     <footer className="footer">
-      <h3>© 2026 rohangop. All Rights Reserved.</h3>
+      <h3>© 2026 shopease. All Rights Reserved.</h3>
     </footer>
   );
 }

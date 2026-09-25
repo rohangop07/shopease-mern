@@ -24,11 +24,7 @@ const categories =[
     title: "Furniture",
     image: "🛋️",
   },
-  {
-    id: 6,
-    title: "Sports",
-    image: "🏀",
-  },
+
 ];
 
 export default categories;
