@@ -19,6 +19,6 @@ connectDB();
 
 //start server
 app.listen(process.env.PORT,() => {
-    console.log(` server running on port ${PORT}`);
+    console.log(` server running on port ₹{PORT}`);
 });
 
