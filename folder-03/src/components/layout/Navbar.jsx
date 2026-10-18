@@ -21,7 +21,7 @@ function Navbar() {
 
   const handleSearch = (e) => {
     if (e.key === "Enter") {
-      navigate(`/products?search=${keyword}`);
+      navigate(`/products?search=₹{keyword}`);
     }
   };
 
@@ -47,7 +47,7 @@ function Navbar() {
         {menuOpen ? <FaTimes /> : <FaBars />}
       </button>
 
-      <div className={`nav-links ${menuOpen ? "active" : ""}`}>
+      <div className={`nav-links ₹{menuOpen ? "active" : ""}`}>
         <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
 
         <Link to="/products">Products</Link>

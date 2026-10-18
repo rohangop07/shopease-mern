@@ -21,7 +21,7 @@ function Products() {
 
   const getProducts = async () => {
     try {
-      const url = keyword ? `/products/search?keyword=${keyword}` : "/products";
+      const url = keyword ? `/products/search?keyword=₹{keyword}` : "/products";
 
       const response = await api.get(url);
 

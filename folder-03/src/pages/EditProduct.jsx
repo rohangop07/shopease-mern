@@ -24,7 +24,7 @@ function EditProduct() {
 
   const getProduct = async () => {
     try {
-      const response = await api.get(`/products/${id}`);
+      const response = await api.get(`/products/₹{id}`);
       setFormData(response.data.product);
     } catch (error) {
       console.log(error);
@@ -42,7 +42,7 @@ function EditProduct() {
     e.preventDefault();
 
     try {
-      await api.put(`/products/${id}`, formData);
+      await api.put(`/products/₹{id}`, formData);
 
       toast.success("product Updated successfully");
 

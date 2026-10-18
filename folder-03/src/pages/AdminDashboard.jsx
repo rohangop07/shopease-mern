@@ -31,7 +31,7 @@ function AdminDashboard() {
     if (!confirmDelete) return;
 
     try {
-      const response = await api.delete(`/products/${id}`);
+      const response = await api.delete(`/products/₹{id}`);
 
       toast.success(response.data.message);
 
@@ -162,7 +162,7 @@ function AdminDashboard() {
                   <td>
                     <button
                       className="edit-btn"
-                      onClick={() => navigate(`/admin/edit/${product._id}`)}
+                      onClick={() => navigate(`/admin/edit/₹{product._id}`)}
                     >
                       Edit
                     </button>

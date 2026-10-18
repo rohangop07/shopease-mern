@@ -31,7 +31,7 @@ function AdminOrders() {
       const token = localStorage.getItem("token");
 
       await api.put(
-        `/orders/${id}`,
+        `/orders/₹{id}`,
         { status },
         {
           headers: {
