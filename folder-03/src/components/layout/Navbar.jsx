@@ -1,36 +1,40 @@
+
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import "./Navbar.css";
-
 import { FaBars, FaTimes } from "react-icons/fa";
 
 function Navbar() {
   const { user, setUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const [keyword, setKeyword] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const closeMenu = () => setMenuOpen(false);
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-
     setUser(null);
-
+    closeMenu();
     navigate("/login");
   };
-  const [keyword, setKeyword] = useState("");
 
   const handleSearch = (e) => {
-    if (e.key === "Enter") {
-      navigate(`/products?search=₹{keyword}`);
+    if (e.key === "Enter" && keyword.trim()) {
+      closeMenu();
+      navigate(`/products?search=${encodeURIComponent(keyword.trim())}`);
     }
   };
-
-  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <nav className="navbar">
       <div className="logo">
-        <Link to="/">ShopEase</Link>
+        <Link to="/" onClick={closeMenu}>
+          ShopEase
+        </Link>
       </div>
 
       <div className="search">
@@ -43,25 +47,46 @@ function Navbar() {
         />
       </div>
 
-      <button className="menu-btn" onClick={() => setMenuOpen(!menuOpen)}>
+      <button
+        type="button"
+        className="menu-btn"
+        onClick={() => setMenuOpen((open) => !open)}
+        aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+        aria-expanded={menuOpen}
+      >
         {menuOpen ? <FaTimes /> : <FaBars />}
       </button>
 
-      <div className={`nav-links ₹{menuOpen ? "active" : ""}`}>
-        <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
+      <div className={`nav-links ${menuOpen ? "active" : ""}`}>
+        <Link to="/" onClick={closeMenu}>
+          Home
+        </Link>
 
-        <Link to="/products">Products</Link>
+        <Link to="/products" onClick={closeMenu}>
+          Products
+        </Link>
 
-        {user && <Link to="/cart" onClick={() => setMenuOpen(false)}>Cart</Link>}
+        {user && (
+          <Link to="/cart" onClick={closeMenu}>
+            Cart
+          </Link>
+        )}
 
         {!user ? (
           <>
-            <Link to="/login" onClick={() => setMenuOpen(false)}>Login</Link>
-            <Link to="/register" onClick={() => setMenuOpen(false)}>Register</Link>
+            <Link to="/login" onClick={closeMenu}>
+              Login
+            </Link>
+
+            <Link to="/register" onClick={closeMenu}>
+              Register
+            </Link>
           </>
         ) : (
           <>
-            <span className="welcome-user">Hello, {user.name}</span>
+            <span className="welcome-user">
+              Hello, {user.name}
+            </span>
 
             <button className="logout-btn" onClick={handleLogout}>
               Logout
