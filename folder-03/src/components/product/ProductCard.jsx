@@ -12,7 +12,7 @@ function ProductCard({ product }) {
 
         <p className="price">₹{product.price}</p>
 
-        <Link to={`/products/₹{product._id}`}>
+        <Link to={`/products/${product._id}`}>
           <button className="buy-btn">View Details</button>
         </Link>
       </div>

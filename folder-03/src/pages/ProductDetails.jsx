@@ -20,7 +20,7 @@ function ProductDetails() {
 
   const getProduct = async () => {
     try {
-      const response = await api.get(`/products/₹{id}`);
+      const response = await api.get(`/products/${id}`);
 
       setProduct(response.data.product);
     } catch (error) {
