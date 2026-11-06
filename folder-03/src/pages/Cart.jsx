@@ -1,74 +1,154 @@
+
 import { useContext } from "react";
 import { CartContext } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
-
-
+import "./Cart.css";
 
 function Cart() {
-  const { cartItems, increaseQty, decreaseQty, removeItem } =
-    useContext(CartContext);
-  const totalPrice = cartItems.reduce(
-    (total, item) => total + item.price * item.qty,
-    0,
-  );
+  const {
+    cartItems,
+    increaseQty,
+    decreaseQty,
+    removeItem,
+  } = useContext(CartContext);
 
   const navigate = useNavigate();
+
+  // Calculate total price
+  const totalPrice = cartItems.reduce(
+    (total, item) => total + item.price * item.qty,
+    0
+  );
+
+  // Format price in Indian Rupees
+  const formatPrice = (price) =>
+    new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+      maximumFractionDigits: 2,
+    }).format(price);
+
   return (
     <div className="cart-page">
-      <h1>Shopping Cart</h1>
+
+      <div className="cart-header">
+        <h1>Shopping Cart</h1>
+        <p>{cartItems.length} products in your cart</p>
+      </div>
 
       {cartItems.length === 0 ? (
-        <h2>Your cart is empty</h2>
+
+        <div className="empty-cart">
+          <h2>Your cart is empty!</h2>
+          <p>Looks like you haven't added anything yet.</p>
+
+          <button onClick={() => navigate("/products")}>
+            Continue Shopping
+          </button>
+        </div>
+
       ) : (
-        cartItems.map((item, index) => (
-          <div key={index} className="cart-item">
-            <img src={item.image} alt={item.name} width="100" />
 
-            <div>
-              <h3>{item.name}</h3>
-              <p>Price: ₹{item.price}</p>
+        <div className="cart-layout">
 
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                  margin: "10px 0",
-                }}
-              >
-                <button onClick={() => decreaseQty(item._id)}>-</button>
+          {/* Cart Products */}
+          <div className="cart-products">
 
-                <span>{item.qty}</span>
+            {cartItems.map((item) => (
+              <div key={item._id} className="cart-item">
 
-                <button onClick={() => increaseQty(item._id)}>+</button>
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="cart-product-image"
+                />
+
+                <div className="cart-product-info">
+
+                  <h3>{item.name}</h3>
+
+                  <p className="cart-price">
+                    {formatPrice(item.price)}
+                  </p>
+
+                  <div className="quantity-control">
+
+                    <button
+                      onClick={() => decreaseQty(item._id)}
+                    >
+                      -
+                    </button>
+
+                    <span>{item.qty}</span>
+
+                    <button
+                      onClick={() => increaseQty(item._id)}
+                    >
+                      +
+                    </button>
+
+                  </div>
+
+                  <p className="item-subtotal">
+                    Subtotal: {formatPrice(item.price * item.qty)}
+                  </p>
+
+                  <button
+                    className="remove-btn"
+                    onClick={() => removeItem(item._id)}
+                  >
+                    Remove
+                  </button>
+
+                </div>
+
               </div>
+            ))}
 
-              <p>Subtotal: ₹{item.price * item.qty}</p>
+          </div>
+
+          {/* Order Summary */}
+          <div className="cart-summary">
+
+            <h2>Order Summary</h2>
+
+            <div className="summary-row">
+              <span>Total Products</span>
+              <span>{cartItems.reduce((sum, item) => sum + item.qty, 0)}</span>
             </div>
+
+            <div className="summary-row">
+              <span>Subtotal</span>
+              <span>{formatPrice(totalPrice)}</span>
+            </div>
+
+            <hr />
+
+            <div className="summary-total">
+              <span>Total Amount</span>
+              <span>{formatPrice(totalPrice)}</span>
+            </div>
+
             <button
-              onClick={() => removeItem(item._id)}
-              style={{
-                background: "red",
-                color: "white",
-                border: "none",
-                padding: "8px 12px",
-                cursor: "pointer",
-                borderRadius: "5px",
-                marginTop: "10px",
-              }}
+              className="checkout-btn"
+              onClick={() => navigate("/checkout")}
             >
-              Remove
+              Proceed to Checkout
             </button>
 
-            <button onClick={() => navigate("/checkout")}>
-  Proceed to Checkout
-</button>
-          </div>
-        ))
-      )}
-      <hr />
+            <button
+              className="continue-btn"
+              onClick={() => navigate("/products")}
+            >
+              Continue Shopping
+            </button>
 
-      <h2>Total: ₹{totalPrice}</h2>
+          </div>
+
+        </div>
+
+      )}
+
     </div>
   );
 }

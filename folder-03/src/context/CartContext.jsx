@@ -1,76 +1,116 @@
 
+import {
+  createContext,
+  useEffect,
+  useState,
+  useContext,
+} from "react";
 
-import {createContext, useEffect, useState} from "react";
+import { AuthContext } from "./AuthContext";
 
 export const CartContext = createContext();
 
 function CartProvider({ children }) {
-const [cartItems, setCartItems] = useState(() => {
-  const savedCart = localStorage.getItem("cart");
 
-  return savedCart ? JSON.parse(savedCart) : [];
-});
+  // Get logged-in user
+  const { user } = useContext(AuthContext);
 
-useEffect(() => {
-  localStorage.setItem("cart", JSON.stringify(cartItems));
-}, [cartItems]);
+  // Get unique user ID
+  const userId = user?._id || user?.id || null;
+
+  // Separate storage for every user
+  const storageKey = userId
+    ? `cart_${userId}`
+    : "cart_guest";
+
+  const [cartItems, setCartItems] = useState([]);
+
+  const [loadedKey, setLoadedKey] = useState(null);
+
+  // Load the correct user's cart
+  useEffect(() => {
+    try {
+      const savedCart = localStorage.getItem(storageKey);
+
+      setCartItems(savedCart ? JSON.parse(savedCart) : []);
+    } catch (error) {
+      console.error("Error loading cart:", error);
+      setCartItems([]);
+    }
+
+    setLoadedKey(storageKey);
+
+  }, [storageKey]);
+
+  // Save cart only after the correct user's cart is loaded
+  useEffect(() => {
+    if (loadedKey !== storageKey) return;
+
+    try {
+      localStorage.setItem(
+        storageKey,
+        JSON.stringify(cartItems)
+      );
+    } catch (error) {
+      console.error("Error saving cart:", error);
+    }
+
+  }, [cartItems, storageKey, loadedKey]);
 
   // Add to Cart
   const addToCart = (product) => {
-    const existingProduct = cartItems.find(
-      (item) => item._id === product._id
-    );
-
-    if (existingProduct) {
-      const updatedCart = cartItems.map((item) =>
-        item._id === product._id
-          ? { ...item, qty: item.qty + 1 }
-          : item
+    setCartItems((prevItems) => {
+      const existingProduct = prevItems.find(
+        (item) => item._id === product._id
       );
 
-      setCartItems(updatedCart);
-    } else {
-      setCartItems([
-        ...cartItems,
+      if (existingProduct) {
+        return prevItems.map((item) =>
+          item._id === product._id
+            ? { ...item, qty: item.qty + 1 }
+            : item
+        );
+      }
+
+      return [
+        ...prevItems,
         {
           ...product,
           qty: 1,
         },
-      ]);
-    }
+      ];
+    });
   };
 
   // Increase Quantity
   const increaseQty = (id) => {
-    const updatedCart = cartItems.map((item) =>
-      item._id === id
-        ? { ...item, qty: item.qty + 1 }
-        : item
+    setCartItems((prevItems) =>
+      prevItems.map((item) =>
+        item._id === id
+          ? { ...item, qty: item.qty + 1 }
+          : item
+      )
     );
-
-    setCartItems(updatedCart);
   };
 
   // Decrease Quantity
   const decreaseQty = (id) => {
-    const updatedCart = cartItems
-      .map((item) =>
-        item._id === id
-          ? { ...item, qty: item.qty - 1 }
-          : item
-      )
-      .filter((item) => item.qty > 0);
-
-    setCartItems(updatedCart);
+    setCartItems((prevItems) =>
+      prevItems
+        .map((item) =>
+          item._id === id
+            ? { ...item, qty: item.qty - 1 }
+            : item
+        )
+        .filter((item) => item.qty > 0)
+    );
   };
 
   // Remove Product
   const removeItem = (id) => {
-    const updatedCart = cartItems.filter(
-      (item) => item._id !== id
+    setCartItems((prevItems) =>
+      prevItems.filter((item) => item._id !== id)
     );
-
-    setCartItems(updatedCart);
   };
 
   return (
